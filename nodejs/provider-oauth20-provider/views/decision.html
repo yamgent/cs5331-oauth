@@ -1,0 +1,33 @@
+<html>
+    <body>
+        <h1>Requesting for Access to Your Account</h1>
+        <p>You are logged in as <b>{{user.name}}</b>. (ID: {{model.user.getId(user)}})</p>
+
+        <hr>
+
+        <p><b>{{client.name}}</b> (ID: {{model.client.getId(client)}}) would like to have access to your account.</p>
+
+        {% if scope.length > 0 %}
+            <p><b>{{client.name}}</b> would like to have the following permissions:</p>
+            <ul>
+            {% for s in scope %}
+                <li>{{s}}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No permissions were requested by <b>{{client.name}}</b>.</p>
+        {% endif %}
+
+        <hr>
+        
+        <p>Allow <b>{{client.name}}</b> to have access?</p>
+        <form method="POST">
+            <input type="hidden" name="decision" value="1"/>
+            <input type="submit" value="Yes"/>
+        </form>
+        <form method="POST">
+            <input type="hidden" name="decision" value="0"/>
+            <input type="submit" value="No"/>
+        </form>
+    </body>
+</html>
