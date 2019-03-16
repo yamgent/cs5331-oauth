@@ -18,9 +18,43 @@
         <hr>
 
         <p><b>Example Authorization Endpoint called by Client:</b></p>
-        <a href="/auth?redirect_uri=http://localhost:4000/&client_id=id.abcmusicplayer&response_type=code">Test Auth Abc</a>
+        <a href="/auth?redirect_uri=http://localhost:4000/&client_id=id.abcmusicplayer&response_type=code">Call Endpoint</a>
 
         <p><b>Example Token Endpoint called by Client:</b></p>
-        <!-- TODO: Example for token endpoint -->
+        <form id="tokenEP" onsubmit="tokenEndpoint(event)">
+            Code: <input id="tokenCode" type="text" placeholder="Code"/><br/>
+            Redirect Uri: <input id="tokenRedirect" type="text" placeholder="Redirect Uri" value="http://localhost:4000/"/><br/>
+            --- Authorization Headers ---<br/>
+            Client ID: <input id="tokenClientId" type="text" placeholder="Client ID" value="id.abcmusicplayer"/><br/>
+            Client Secret: <input id="tokenClientSecret" type="text" placeholder="Client Secret" value="secret.abc"/><br/></Headers>
+            <input type="submit" value="Call Endpoint"/>
+        </form>
+        <p>Token EP Result:</p>
+        <p id="tokenEPResult">-none-</p>
+
+        <script>
+            const tokenEndpoint = (event) => {
+                event.preventDefault();
+
+                const code = document.getElementById("tokenCode").value;
+                const redirectUri = document.getElementById("tokenRedirect").value;
+                const id = document.getElementById("tokenClientId").value;
+                const secret = document.getElementById("tokenClientSecret").value;
+
+                const authorizationHeaderValue = `Basic ${btoa(`${id}:${secret}`)}`;
+
+                const http = new XMLHttpRequest();
+                http.open('POST', '/token');
+                http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                http.setRequestHeader('Authorization', authorizationHeaderValue);
+                const body = `grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}`;
+                http.send(body);
+
+                http.onload = () => {
+                    document.getElementById("tokenEPResult").innerText = `${http.status}: ${http.statusText} \n ${http.responseText}`;
+                };
+                return false;
+            };
+        </script>
     </body>
 </html>

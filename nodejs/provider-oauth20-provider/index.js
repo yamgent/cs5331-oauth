@@ -8,8 +8,10 @@ const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+const accessTokenModel = require('./model/accessToken');
 const clientModel = require('./model/client');
 const codeModel = require('./model/code');
+const refreshTokenModel = require('./model/refreshToken');
 const routes = require('./routes/routes');
 const userModel = require('./model/user');
 const controller = require('./controller/controller');
@@ -18,8 +20,10 @@ const port = 8000;
 const sessionSecret = 'session.secret';
 
 // set up oauth2 with our authorization logics
+accessTokenModel.install(oauth2);
 clientModel.install(oauth2);
 codeModel.install(oauth2);
+refreshTokenModel.install(oauth2);
 userModel.install(oauth2);
 controller.install(oauth2);
 
@@ -32,7 +36,7 @@ app.set('view engine', 'html');
 app.use(oauth2.inject());
 
 // inject session
-app.use(session({ secret: 'sessionSecret', resave: false, saveUninitialized: false }));
+app.use(session({ secret: sessionSecret, resave: false, saveUninitialized: false }));
 
 // support parsing of application/json type post data
 app.use(bodyParser.json());
