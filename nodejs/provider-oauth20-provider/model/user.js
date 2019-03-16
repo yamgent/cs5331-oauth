@@ -2,8 +2,9 @@
 
 const registeredUsers = [
     {
-        id: 'id.johndoe', 
+        id: 'id.johndoe',
         name: 'John Doe',
+        password: 'johndoe'
     }
 ];
 
@@ -21,6 +22,15 @@ const fetchFromRequest = (request) => {
     return null;
 };
 
+const checkPassword = (user, password, callback) => {
+    for (const u of registeredUsers) {
+        if (u.id === user && u.password) {
+            return callback(null, true);
+        }
+    }
+    callback(null, false);
+}
+
 const getId = (user) => {
     return user.id;
 }
@@ -28,6 +38,7 @@ const getId = (user) => {
 const install = (oauth2) => {
     oauth2.model.user.fetchFromRequest = fetchFromRequest;
     oauth2.model.user.getId = getId;
+    oauth2.model.user.checkPassword = checkPassword;
 }
 
 module.exports = { install };
