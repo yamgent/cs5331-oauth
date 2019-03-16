@@ -2,6 +2,11 @@ const loginUser = (req, res, oauth2) => {
     const userId = req.body.loginuser;
     const password = req.body.loginpassword;
 
+    // in case returnUri is malicious
+    delete req.body.loginuser;
+    delete req.body.loginpassword;
+
+    // TODO: Any way to secure returnUri? It is not trustworthy at all!
     let returnUri = req.query.return_uri ? decodeURIComponent(req.query.return_uri) : '/';
 
     if (req.session.authorized) {
