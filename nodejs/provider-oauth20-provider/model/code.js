@@ -3,16 +3,11 @@ const crypto = require('crypto');
 // TODO: Remove hardcode
 const savedCodes = [];
 
-const codeAliveDurationMs = 60 * 1000;  // relying party must get an access token within
-                                        // this amount of time since the code was issued
-                                        // otherwise it expires
-
 const createCodeForUserWithClient = (userId, clientId, scope, ttl, callback) => {
     var code = crypto.randomBytes(32).toString('hex');
 
     // save codes so that relying party can verify with us
-    const newCode = { code, userId, clientId, scope, ttl: new Date().getTime() + codeAliveDurationMs, claimed: false };
-    console.log(newCode);
+    const newCode = { code, userId, clientId, scope, ttl, endtime: new Date().getTime() + ttl * 1000, claimed: false };
     savedCodes.push(newCode);
 
     callback(null, code);
@@ -33,7 +28,7 @@ const getClientId = (code) => {
 }
 
 const checkTTL = (code) => {
-    return !code.claimed && code.ttl > new Date().getTime();
+    return !code.claimed && code.endtime > new Date().getTime();
 }
 
 const getUserId = (code) => {
