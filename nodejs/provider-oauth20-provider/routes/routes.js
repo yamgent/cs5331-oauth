@@ -1,4 +1,5 @@
 const login = require('../controller/login');
+const introspection = require('../controller/introspection');
 
 const setupRoutes = (app, oauth2) => {
     app.get('/', (req, res) => {
@@ -17,6 +18,10 @@ const setupRoutes = (app, oauth2) => {
     app.get('/auth', login.checkUserLoggedIn, oauth2.controller.authorization);    
     app.post('/auth', login.checkUserLoggedIn, oauth2.controller.authorization);    
     app.post('/token', oauth2.controller.token);
+
+    app.post('/introspection', (req, res) => {
+        res.end(JSON.stringify(introspection.getUserClientId(oauth2, req.body.access_token)));
+    });
 };
 
 module.exports = { setupRoutes };
