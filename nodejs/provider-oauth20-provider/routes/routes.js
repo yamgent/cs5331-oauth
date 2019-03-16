@@ -2,7 +2,7 @@ const login = require('../controller/login');
 
 const setupRoutes = (app, oauth2) => {
     app.get('/', (req, res) => {
-        res.render('index');
+        res.render('index', { userFullName: login.getLoggedInUserFullName(req, oauth2) });
     });
     
     app.get('/login', (req, res) => {

@@ -1,5 +1,18 @@
 <html>
     <body>
+        <h1>Identity Provider Homepage</h1>
+        <p>Welcome!</p>
+
+        <hr>
+
+        {% if userFullName === '' %}
+            <p>You are not logged in. <a href="/login">Click here to login.</a></p>
+        {% else %}
+            <p>You are logged in as <b>{{userFullName}}.</b></p>
+        {% endif %}
+
+        <hr>
+
         <a href="/auth?redirect_uri=http://localhost:4000/&client_id=id.abcmusicplayer&response_type=code">Test Auth Abc</a>
     </body>
 </html>
