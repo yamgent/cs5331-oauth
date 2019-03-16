@@ -11,7 +11,6 @@ const registeredClients = [
 ];
 
 const fetchById = (clientId, callback) => {
-    console.log(clientId);
     for (const c of registeredClients) {
         if (c.id === clientId) {
             return callback(null, c);

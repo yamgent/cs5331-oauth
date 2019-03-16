@@ -29,7 +29,6 @@ const checkUserLoggedIn = (req, res, next) => {
 const getLoggedInUserFullName = (req, oauth2) => {
     if (req.session && req.session.authorized) {
         const user = oauth2.model.user.fetchFromRequest(req);
-        console.log(user);
         return user !== null ? user.name : '';
     } else {
         return '';
