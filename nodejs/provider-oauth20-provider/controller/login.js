@@ -6,8 +6,8 @@ const loginUser = (req, res, oauth2) => {
     delete req.body.loginuser;
     delete req.body.loginpassword;
 
-    // TODO: Any way to secure returnUri? It is not trustworthy at all!
-    let returnUri = req.query.return_uri ? decodeURIComponent(req.query.return_uri) : '/';
+    let returnUri = req.session.loginReturnUri || '/';
+    req.session.loginReturnUri = '';
 
     if (req.session.authorized) {
         // already logged in
@@ -26,10 +26,13 @@ const loginUser = (req, res, oauth2) => {
 };
 
 const checkUserLoggedIn = (req, res, next) => {
+    req.session.loginReturnUri = '';
+    
     if (req.session && req.session.authorized) 
         next();
     else {
-        res.redirect(`/login?return_uri=${encodeURIComponent(req.originalUrl)}`);
+        req.session.loginReturnUri = req.originalUrl;
+        res.redirect(`/login`);
     }
 };
 
