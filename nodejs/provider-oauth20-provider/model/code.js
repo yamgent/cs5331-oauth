@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 
-// TODO: Remove hardcode
 const savedCodes = [];
 
 const createCodeForUserWithClient = (userId, clientId, scope, ttl, callback) => {
