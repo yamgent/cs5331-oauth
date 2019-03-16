@@ -2,9 +2,11 @@ const loginUser = (req, res, oauth2) => {
     const userId = req.body.loginuser;
     const password = req.body.loginpassword;
 
+    let returnUri = req.query.return_uri ? decodeURIComponent(req.query.return_uri) : '/';
+
     if (req.session.authorized) {
         // already logged in
-        res.redirect('/');  // TODO: Better redirect (should redirect to /auth)
+        res.redirect(returnUri);
     }
 
     oauth2.model.user.checkPassword(userId, password, (errorMessage, correct) => {
@@ -13,7 +15,7 @@ const loginUser = (req, res, oauth2) => {
         } else {
             req.session.user = userId;
             req.session.authorized = true;
-            res.redirect('/');  // TODO: Better redirect (should redirect to /auth)
+            res.redirect(returnUri);
         }
     });
 };
@@ -22,7 +24,7 @@ const checkUserLoggedIn = (req, res, next) => {
     if (req.session && req.session.authorized) 
         next();
     else {
-        res.redirect('/login');
+        res.redirect(`/login?return_uri=${encodeURIComponent(req.originalUrl)}`);
     }
 };
 
