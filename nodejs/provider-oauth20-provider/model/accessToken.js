@@ -1,9 +1,14 @@
-const savedTokens = [];
+const crypto = require('crypto');
+
+const savedAccessTokens = [];
 
 const create = (userId, clientId, scope, ttl, cb) => {
-    const token = { userId, clientId, scope, ttl };
-    savedTokens.push(token);
-    return cb(null, token);
+    const accessToken = crypto.randomBytes(32).toString('hex');
+
+    const tokenEntry = { userId, clientId, scope, accessToken, ttl };
+    savedAccessTokens.push(tokenEntry);
+
+    return cb(null, accessToken);
 }
 
 const install = (oauth2) => {
