@@ -36,4 +36,10 @@ const getLoggedInUserFullName = (req, oauth2) => {
     }
 };
 
-module.exports = { loginUser, checkUserLoggedIn, getLoggedInUserFullName };
+const logoutUser = (req, res) => {
+    req.session.user = '';
+    req.session.authorized = false;
+    res.redirect('/'); 
+}
+
+module.exports = { loginUser, checkUserLoggedIn, getLoggedInUserFullName, logoutUser };

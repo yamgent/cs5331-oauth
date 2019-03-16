@@ -11,6 +11,8 @@ const setupRoutes = (app, oauth2) => {
     app.post('/login', (req, res) => {
         login.loginUser(req, res, oauth2);
     });
+
+    app.post('/logout', login.logoutUser);
     
     app.get('/auth', login.checkUserLoggedIn, oauth2.controller.authorization);    
     app.post('/auth', login.checkUserLoggedIn, oauth2.controller.authorization);    
